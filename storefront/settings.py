@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
     "store",
     "tags",
     "likes",
@@ -82,7 +83,7 @@ DATABASES = {
         "NAME": "storefront",
         "HOST": "localhost",
         "USER": "root",
-        "PASSWORD": "password"
+        "PASSWORD": "password",
     }
 }
 
@@ -127,3 +128,5 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+REST_FRAMEWORK = {"COERCE_DECIMAL_TO_STRING": False}
