@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.urls import path
+from rest_framework.routers import SimpleRouter
 from . import views
 
-urlpatterns = [
-    path("products/", views.ProductList.as_view()),
-    path("products/<int:pk>/", views.ProductDetail.as_view()),
-]
+
+router = SimpleRouter()
+router.register("products", views.ProductViewSet)
+
+urlpatterns = router.urls
