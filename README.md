@@ -1,1 +1,1 @@
-## Django StoreFront Course by Code with Mosh
+## Codes for learning Python Django
