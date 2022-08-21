@@ -5,6 +5,6 @@ from . import views
 
 
 router = SimpleRouter()
-router.register("products", views.ProductViewSet)
+router.register("products", views.ProductViewSet, basename="products")
 
 urlpatterns = router.urls
