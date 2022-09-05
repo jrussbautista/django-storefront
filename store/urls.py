@@ -6,5 +6,6 @@ from . import views
 
 router = SimpleRouter()
 router.register("products", views.ProductViewSet, basename="products")
+router.register("carts", views.CartViewSet, basename="carts")
 
 urlpatterns = router.urls

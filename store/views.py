@@ -2,12 +2,17 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework.mixins import (
+    CreateModelMixin,
+    RetrieveModelMixin,
+    DestroyModelMixin,
+)
 
 from .pagination import DefaultPagination
 from .filters import ProductFilter
-from .models import OrderItem, Product
-from .serializers import ProductSerializer
+from .models import Cart, OrderItem, Product
+from .serializers import CartSerializer, ProductSerializer
 
 
 class ProductViewSet(ModelViewSet):
@@ -29,3 +34,10 @@ class ProductViewSet(ModelViewSet):
                 status=status.HTTP_405_METHOD_NOT_ALLOWED,
             )
         return super().destroy(request, *args, **kwargs)
+
+
+class CartViewSet(
+    CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, GenericViewSet
+):
+    queryset = Cart.objects.prefetch_related("items__product").all()
+    serializer_class = CartSerializer
