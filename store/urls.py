@@ -1,11 +1,12 @@
-from django.contrib import admin
-from django.urls import path
-from rest_framework.routers import SimpleRouter
+from rest_framework_nested import routers
 from . import views
 
 
-router = SimpleRouter()
+router = routers.DefaultRouter()
 router.register("products", views.ProductViewSet, basename="products")
 router.register("carts", views.CartViewSet, basename="carts")
 
-urlpatterns = router.urls
+cart_routers = routers.NestedDefaultRouter(router, "carts", lookup="cart")
+cart_routers.register("items", views.CartItemViewSet, basename="cart-items")
+
+urlpatterns = router.urls + cart_routers.urls
