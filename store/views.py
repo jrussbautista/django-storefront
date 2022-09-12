@@ -12,7 +12,12 @@ from rest_framework.mixins import (
 from .pagination import DefaultPagination
 from .filters import ProductFilter
 from .models import Cart, CartItem, OrderItem, Product
-from .serializers import CartItemSerializer, CartSerializer, ProductSerializer
+from .serializers import (
+    AddCartItemSerializer,
+    CartItemSerializer,
+    CartSerializer,
+    ProductSerializer,
+)
 
 
 class ProductViewSet(ModelViewSet):
@@ -44,10 +49,15 @@ class CartViewSet(
 
 
 class CartItemViewSet(ModelViewSet):
-
-    serializer_class = CartItemSerializer
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return AddCartItemSerializer
+        return CartItemSerializer
 
     def get_queryset(self):
         return CartItem.objects.filter(cart_id=self.kwargs["cart_pk"]).select_related(
             "product"
         )
+
+    def get_serializer_context(self):
+        return {"cart_id": self.kwargs["cart_pk"]}
