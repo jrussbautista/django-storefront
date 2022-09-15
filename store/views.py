@@ -10,6 +10,7 @@ from rest_framework.mixins import (
     DestroyModelMixin,
     UpdateModelMixin,
 )
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .pagination import DefaultPagination
 from .filters import ProductFilter
@@ -77,6 +78,7 @@ class CustomerViewSet(
 ):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
+    permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=["GET", "PUT"])
     def me(self, request):
