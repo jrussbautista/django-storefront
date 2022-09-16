@@ -15,12 +15,13 @@ from store.permissions import IsAdminOrReadOnly, ViewCustomerHistoryPermission
 
 from .pagination import DefaultPagination
 from .filters import ProductFilter
-from .models import Cart, CartItem, Customer, OrderItem, Product
+from .models import Cart, CartItem, Customer, Order, OrderItem, Product
 from .serializers import (
     AddCartItemSerializer,
     CartItemSerializer,
     CartSerializer,
     CustomerSerializer,
+    OrderSerializer,
     ProductSerializer,
     UpdateCartItemSerializer,
 )
@@ -94,3 +95,8 @@ class CustomerViewSet(ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)
+
+
+class OrderViewSet(ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
