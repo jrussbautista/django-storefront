@@ -11,7 +11,7 @@ from rest_framework.mixins import (
 )
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
-from store.permissions import IsAdminOrReadOnly
+from store.permissions import IsAdminOrReadOnly, ViewCustomerHistoryPermission
 
 from .pagination import DefaultPagination
 from .filters import ProductFilter
@@ -78,6 +78,10 @@ class CustomerViewSet(ModelViewSet):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
     permission_classes = [IsAdminUser]
+
+    @action(detail=True, permission_classes=[ViewCustomerHistoryPermission])
+    def history(self, request, pk):
+        return Response("ok")
 
     @action(detail=False, methods=["GET", "PUT"], permission_classes=[IsAuthenticated])
     def me(self, request):
