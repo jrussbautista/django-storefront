@@ -1,3 +1,6 @@
+from cgitb import lookup
+from email.mime import base
+from itertools import product
 from rest_framework_nested import routers
 from . import views
 
@@ -8,7 +11,9 @@ router.register("carts", views.CartViewSet, basename="carts")
 router.register("customers", views.CustomerViewSet)
 router.register("orders", views.OrderViewSet)
 
-cart_routers = routers.NestedDefaultRouter(router, "carts", lookup="cart")
-cart_routers.register("items", views.CartItemViewSet, basename="cart-items")
+products_router = routers.NestedDefaultRouter(router, "products", lookup="product")
+products_router.register("reviews", views.ReviewViewSet, basename="reviews")
+carts_router = routers.NestedDefaultRouter(router, "carts", lookup="cart")
+carts_router.register("items", views.CartItemViewSet, basename="cart-items")
 
-urlpatterns = router.urls + cart_routers.urls
+urlpatterns = router.urls + products_router.urls + carts_router.urls

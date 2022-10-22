@@ -2,7 +2,16 @@ from dataclasses import fields
 from decimal import Decimal
 from pyexpat import model
 from rest_framework import serializers
-from .models import Cart, CartItem, Collection, Customer, Order, OrderItem, Product
+from .models import (
+    Cart,
+    CartItem,
+    Collection,
+    Customer,
+    Order,
+    OrderItem,
+    Product,
+    Review,
+)
 
 
 class CollectionSerializer(serializers.ModelSerializer):
@@ -123,3 +132,13 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ["id", "customer", "placed_at", "payment_status", "items"]
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ["id", "date", "name", "description"]
+
+    def create(self, validated_data):
+        product_id = self.context["product_id"]
+        return Review.objects.create(product_id=product_id, **validated_data)

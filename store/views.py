@@ -15,7 +15,7 @@ from store.permissions import IsAdminOrReadOnly, ViewCustomerHistoryPermission
 
 from .pagination import DefaultPagination
 from .filters import ProductFilter
-from .models import Cart, CartItem, Customer, Order, OrderItem, Product
+from .models import Cart, CartItem, Customer, Order, OrderItem, Product, Review
 from .serializers import (
     AddCartItemSerializer,
     CartItemSerializer,
@@ -23,6 +23,7 @@ from .serializers import (
     CustomerSerializer,
     OrderSerializer,
     ProductSerializer,
+    ReviewSerializer,
     UpdateCartItemSerializer,
 )
 
@@ -100,3 +101,14 @@ class CustomerViewSet(ModelViewSet):
 class OrderViewSet(ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
+
+class ReviewViewSet(ModelViewSet):
+    serializer_class = ReviewSerializer
+
+    def get_queryset(self):
+        product_id = self.kwargs["product_pk"]
+        return Review.objects.filter(product_id=product_id)
+
+    def get_serializer_context(self):
+        return {"product_id": self.kwargs["product_pk"]}
