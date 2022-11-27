@@ -123,10 +123,12 @@ class OrderItemSerializer(serializers.ModelSerializer):
         model = OrderItem
         fields = ["id", "product", "unit_price", "quantity"]
 
+
 class UpdateOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ['payment_status']
+        fields = ["payment_status"]
+
 
 class CreateOrderSerializer(serializers.Serializer):
     cart_id = serializers.UUIDField()
@@ -134,32 +136,36 @@ class CreateOrderSerializer(serializers.Serializer):
     def validate_cart_id(self, cart_id):
         cart_exists = Cart.objects.filter(id=cart_id).exists()
         if not cart_exists:
-            raise serializers.ValidationError('No cart with the given ID was found.')
+            raise serializers.ValidationError("No cart with the given ID was found.")
         cart_items_count = CartItem.objects.filter(cart_id=cart_id).count()
         if cart_items_count == 0:
-            raise serializers.ValidationError('The cart is empty.')
+            raise serializers.ValidationError("The cart is empty.")
         return cart_id
 
     def save(self, **kwargs):
         with transaction.atomic():
-            cart_id = self.validated_data['cart_id']
-            user_id = self.context['user_id'] 
-            (customer, created) = Customer.objects.get_or_create(user_id=user_id)
+            cart_id = self.validated_data["cart_id"]
+            user_id = self.context["user_id"]
+            customer = Customer.objects.get(user_id=user_id)
             order = Order.objects.create(customer=customer)
 
-            cart_items = CartItem.objects.select_related('product').filter(cart_id=cart_id)
+            cart_items = CartItem.objects.select_related("product").filter(
+                cart_id=cart_id
+            )
             order_items = [
                 OrderItem(
                     order=order,
                     product=item.product,
                     unit_price=item.product.price,
-                    quantity=item.quantity
-                ) for item in cart_items
+                    quantity=item.quantity,
+                )
+                for item in cart_items
             ]
             OrderItem.objects.bulk_create(order_items)
             Cart.objects.filter(id=cart_id).delete()
             return order
- 
+
+
 class OrderSerializer(serializers.ModelSerializer):
 
     items = OrderItemSerializer(many=True)
