@@ -1,6 +1,3 @@
-from cgitb import lookup
-from email.mime import base
-from itertools import product
 from rest_framework_nested import routers
 from . import views
 
