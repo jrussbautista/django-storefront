@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 pillow = "*"
 django-cors-headers = "*"
+django-templated-mail = "*"
 
 [dev-packages]
 
