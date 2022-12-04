@@ -159,3 +159,10 @@ DJOSER = {
 SIMPLE_JWT = {"AUTH_HEADER_TYPES": ("JWT",), "ACCESS_TOKEN_LIFETIME": timedelta(days=1)}
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:8001", "http://127.0.0.1:8001"]
+
+EMAIL_BACKEND = "django.core.email.backends.smtp.EmailBackend"
+EMAIL_HOST = "localhost"
+EMAIL_HOST_USER = ""
+EMAIL_HOST_PASSWORD = ""
+EMAIL_PORT = 2525
+DEFAULT_FROM_EMAIL = "from@storefront.com"
