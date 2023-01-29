@@ -16,9 +16,11 @@ from .signals import order_created
 
 
 class CollectionSerializer(serializers.ModelSerializer):
+    products_count = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Collection
-        fields = ["id", "title"]
+        fields = ["id", "title", "products_count"]
 
 
 class ProductImageSerializer(serializers.ModelSerializer):

@@ -3,6 +3,7 @@ from . import views
 
 
 router = routers.DefaultRouter()
+router.register("collections", views.CollectionViewSet)
 router.register("products", views.ProductViewSet, basename="products")
 router.register("carts", views.CartViewSet, basename="carts")
 router.register("customers", views.CustomerViewSet)

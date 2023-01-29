@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.decorators import action
@@ -24,6 +25,7 @@ from .models import (
     Product,
     ProductImage,
     Review,
+    Collection,
 )
 from .serializers import (
     AddCartItemSerializer,
@@ -37,7 +39,14 @@ from .serializers import (
     UpdateCartItemSerializer,
     CreateOrderSerializer,
     UpdateOrderSerializer,
+    CollectionSerializer,
 )
+
+
+class CollectionViewSet(ModelViewSet):
+    queryset = Collection.objects.annotate(products_count=Count("products")).all()
+    serializer_class = CollectionSerializer
+    permission_classes = [IsAdminOrReadOnly]
 
 
 class ProductViewSet(ModelViewSet):
